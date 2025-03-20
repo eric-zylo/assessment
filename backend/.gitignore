@@ -1,0 +1,7 @@
+.bundle
+log/*.log
+tmp/**/*
+*.swp
+.DS_Store
+config/database.yml
+node_modules
