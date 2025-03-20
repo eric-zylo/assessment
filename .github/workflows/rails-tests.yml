@@ -1,0 +1,87 @@
+name: Rails Tests
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: backend_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-timeout=30s
+          --health-interval=5s
+          --health-retries=5
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.2.2'
+        bundler-cache: true
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Install dependencies
+      run: |
+        cd backend
+        bundle install
+        yarn install
+
+    - name: Set Environment Variables
+      run: |
+        echo "POSTGRES_USER=postgres" >> $GITHUB_ENV
+        echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> $GITHUB_ENV
+        echo "POSTGRES_HOST=localhost" >> $GITHUB_ENV
+
+    - name: Create database.yml
+      run: |
+        mkdir -p backend/config
+        cat <<EOF > backend/config/database.yml
+        default: &default
+          adapter: postgresql
+          encoding: unicode
+          pool: 5
+          username: <%= ENV['POSTGRES_USER'] || 'eric' %>
+          password: <%= ENV['POSTGRES_PASSWORD'] || '' %>
+          host: localhost
+          port: 5432
+
+        test:
+          <<: *default
+          database: backend_test
+
+        development:
+          <<: *default
+          database: backend_development
+        EOF
+
+    - name: Verify database.yml creation
+      run: |
+        ls -l backend/config/database.yml
+
+    - name: Set up database
+      run: |
+        cd backend
+        bundle exec rails db:create db:migrate
+
+    - name: Run tests
+      run: |
+        cd backend
+        bundle exec rake test

@@ -3,7 +3,7 @@ require "test_helper"
 class Users::SessionsControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
-  setup do
+  def setup
     @user = FactoryBot.create(:user)
     @protected_url = user_path(@user)
   end
@@ -17,7 +17,7 @@ class Users::SessionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create session and set JWT cookie on successful login" do
-    post user_session_url, params: { user: { email: @user.email, password: "password" } }, as: :json
+    post user_session_url, params: { user: { email: @user.email, password: "Valid1!!" } }, as: :json
   
     assert_response :ok
     assert response.cookies["jwt"].present?, "JWT cookie was not set"
