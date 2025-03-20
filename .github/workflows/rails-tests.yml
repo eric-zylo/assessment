@@ -42,10 +42,10 @@ jobs:
 
     - name: Set up database
       run: |
-        cd backend
+        cd backend # Explicitly change to backend directory
         bundle exec rails db:create db:migrate
 
     - name: Run tests
       run: |
-        cd backend
+        cd backend # Explicitly change to backend directory
         bundle exec rake test
