@@ -40,6 +40,36 @@ jobs:
         bundle install
         yarn install
 
+    - name: Install dockerize
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y wget
+        wget https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-linux-amd64-v0.6.1.tar.gz
+        tar -xvf dockerize-linux-amd64-v0.6.1.tar.gz
+        sudo mv dockerize /usr/local/bin/
+
+    - name: Generate database.yml (if not present)
+      run: |
+        cd backend
+        if [ ! -f config/database.yml ]; then
+          echo "Generating config/database.yml"
+          echo "default: &default
+            adapter: postgresql
+            encoding: unicode
+            pool: <%= ENV.fetch('RAILS_MAX_THREADS') { 5 } %>
+          development:
+            <<: *default
+            database: backend_development
+          test:
+            <<: *default
+            database: backend_test
+          production:
+            <<: *default
+            database: backend_production
+            username: <%= ENV['DATABASE_USERNAME'] %>
+            password: <%= ENV['DATABASE_PASSWORD'] %>" > config/database.yml
+        fi
+
     - name: Set up database
       run: |
         cd backend
