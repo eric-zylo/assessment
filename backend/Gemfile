@@ -35,7 +35,6 @@ gem "thruster", require: false
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin Ajax possible
 gem "rack-cors"
 gem 'devise'
-gem 'devise-security'
 gem 'jwt'
 
 group :development, :test do
@@ -48,6 +47,7 @@ group :development, :test do
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
   gem 'minitest-focus'
+  gem 'pry-rails'
 end
 
 group :test do

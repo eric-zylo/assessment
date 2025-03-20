@@ -1,4 +1,3 @@
-require Rails.root.join('lib', 'strategies', 'jwt_authenticatable')
 # frozen_string_literal: true
 
 # Assuming you have not yet modified this file, each configuration option below
@@ -180,7 +179,6 @@ Devise.setup do |config|
   # ==> Configuration for :validatable
   # Enforce complex passwords
   config.password_length = 8..128
-  config.password_complexity = { digit: 1, lower: 1, upper: 1, special: 1 }
 
   # Email regex used to validate email formats. It simply asserts that
   # one (and only one) @ exists in the given string. This is mainly
