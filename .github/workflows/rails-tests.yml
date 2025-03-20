@@ -42,10 +42,11 @@ jobs:
 
     - name: Set up database
       run: |
-        cd backend # Explicitly change to backend directory
+        cd backend
+        dockerize -wait tcp://localhost:5432 -timeout 1m
         bundle exec rails db:create db:migrate
 
     - name: Run tests
       run: |
-        cd backend # Explicitly change to backend directory
+        cd backend
         bundle exec rake test
