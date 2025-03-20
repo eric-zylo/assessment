@@ -87,17 +87,3 @@ jobs:
       run: |
         cd backend
         bundle exec rake test
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: test
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 3.2.2
-      - name: Deploy to Render
-        run: |
-          curl -fsSL https://render.com/deploy/github-actions.sh | bash
