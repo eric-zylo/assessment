@@ -1,1 +1,2 @@
 .env
+backend/config/credentials.yml.enc

@@ -5,3 +5,4 @@ tmp/**/*
 .DS_Store
 config/database.yml
 node_modules
+config/credentials.yml.enc
