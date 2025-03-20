@@ -6,3 +6,5 @@ tmp/**/*
 config/database.yml
 node_modules
 config/credentials.yml.enc
+/config/credentials/
+/config/master.key
